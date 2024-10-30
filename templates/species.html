@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block title %}
+List All Species Count
+{% endblock %}
+{% block content %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+google.charts.load("current", {packages:["corechart"]});
+google.charts.setOnLoadCallback(drawChart);
+function drawChart() {
+    var data = google.visualization.arrayToDataTable([
+        {% for key, value in data.items() %}
+            {% if value is string %}
+                ['{{ key }}', '{{ value }}'],
+            {% else %}
+                ['{{ key }}', {{ value }}],
+            {% endif %}
+        {% endfor %}
+    ]);
+
+    var options = {
+    title: 'Bird Species:',
+    is3D: true,
+    //pieHole: 0.5
+    pieStartAngle: 100
+    /*slices: {
+        2: {offset: 0.2},
+        3: {offset: 0.3}
+    }*/
+    /*slices: {
+        1: { color: 'transparent' }
+    }*/
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+    chart.draw(data, options);
+}
+</script>
+
+    <table border="1px">
+        <thead>
+            <td><strong>Species</strong></td>
+            <td><strong>Count</strong></td>
+        </thead>
+
+        {% for row in rows %}
+        <tr>
+            <td>{{ row["EnglishName"] }}</td>
+            <td>{{ row["count(*)"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3>Total Bird Count Chart</h3>
+    <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
+{% endblock %}

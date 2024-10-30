@@ -1,0 +1,186 @@
+{% extends "layout.html" %}
+{% block title %}
+2KMN Bird Classifier Flask Server
+{% endblock %}
+{% block content %}
+<h1>Welcome to 2KMN Bird Classifier Database!</h1>
+<br>
+
+<p>
+    This is a website that shows the details of the database of the 2KMN Bird Detector.
+</p>
+<p>
+    You can export the database's csv file by clicking the export button on the header.
+</p>
+<br>
+<p>The classes or families of birds the 2KMN application will include, will be the following:<br>
+    Anatidae<br>
+    Ardeidae<br>
+    Columbidae<br>
+    Sturnidae<br>
+    Hirundinidae<br>
+    Laridae<br>
+    Scolopacidae<br>
+    Recurvirostridae<br>
+    Meropidae<br>
+    Acrocephalidae<br>
+    Alcedinidae<br>
+    Motacillidae<br>
+    Rallidae<br>
+    Nectariniidae<br>
+    Cisticolidae<br>
+    Charadriidae<br>
+    Corvidae<br>
+    Podicipedidae<br>
+    Cuculidae<br>
+    Alaudidae<br>
+    Rhipiduridae<br>
+    Estrildidae<br>
+    Locustellidae<br>
+    Dicaeidae<br>
+    </p>
+
+<br>
+<br>
+<h2>History List</h2>
+<p>
+    Shows the history of the recordings.
+</p>
+<table border="1px">
+    <thead>
+        <td><strong>Bird Row ID</strong></td>
+        <td><strong>English Name</strong></td>
+        <td><strong>Scientific Name</strong></td>
+        <td><strong>Class/ Family</strong></td>
+        <td><strong>Time of Recording</strong></td>
+        <td><strong>Longitude</strong></td>
+        <td><strong>Latitude</strong></td>
+    </thead>
+
+    {% for row in rows_list %}
+    <tr>
+        <td>{{ row["rowid"] }}</td>
+        <td>{{ row["EnglishName"] }}</td>
+        <td> {{ row["ScientificName"]}}</td>
+        <td>{{ row["Class"] }}</td>
+        <td>{{ row["Time"] }}</td>
+        <td>{{ row["longitude"] }}</td>
+        <td>{{ row["latitude"] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<br>
+<br>
+<h2>Species Count</h2>
+<p>
+    Shows the amount of species recorded by the 2KMN application.
+</p>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+google.charts.load("current", {packages:["corechart"]});
+google.charts.setOnLoadCallback(drawChart);
+function drawChart() {
+    var data_species = google.visualization.arrayToDataTable([
+        {% for key, value in data_species.items() %}
+            {% if value is string %}
+                ['{{ key }}', '{{ value }}'],
+            {% else %}
+                ['{{ key }}', {{ value }}],
+            {% endif %}
+        {% endfor %}
+    ]);
+
+    var options = {
+    title: 'Bird Species:',
+    is3D: true,
+    //pieHole: 0.5
+    pieStartAngle: 100
+    /*slices: {
+        2: {offset: 0.2},
+        3: {offset: 0.3}
+    }*/
+    /*slices: {
+        1: { color: 'transparent' }
+    }*/
+    };
+
+    var chart_species = new google.visualization.PieChart(document.getElementById('piechart_3d_species'));
+    chart_species.draw(data_species, options);
+}
+</script>
+
+    <table border="1px">
+        <thead>
+            <td><strong>Species</strong></td>
+            <td><strong>Count</strong></td>
+        </thead>
+
+        {% for row in rows_species %}
+        <tr>
+            <td>{{ row["EnglishName"] }}</td>
+            <td>{{ row["count(*)"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3>Total Bird Count Chart</h3>
+    <div id="piechart_3d_species" style="width: 900px; height: 500px;"></div>
+
+
+<br>
+<br>
+<h2>Class Count</h2>
+<p>
+    Shows the amount of class recorded by the 2KMN application.
+</p>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+google.charts.load("current", {packages:["corechart"]});
+google.charts.setOnLoadCallback(drawChart);
+function drawChart() {
+    var data_class = google.visualization.arrayToDataTable([
+        {% for key, value in data_class.items() %}
+            {% if value is string %}
+                ['{{ key }}', '{{ value }}'],
+            {% else %}
+                ['{{ key }}', {{ value }}],
+            {% endif %}
+        {% endfor %}
+    ]);
+
+    var options = {
+    title: 'Bird Species:',
+    is3D: true,
+    //pieHole: 0.5
+    pieStartAngle: 100
+    /*slices: {
+        2: {offset: 0.2},
+        3: {offset: 0.3}
+    }*/
+    /*slices: {
+        1: { color: 'transparent' }
+    }*/
+    };
+
+    var chart = new google.visualization.PieChart(document.getElementById('piechart_3d_class'));
+    chart.draw(data_class, options);
+}
+</script>
+
+    <table border="1px">
+        <thead>
+            <td><strong>Species</strong></td>
+            <td><strong>Count</strong></td>
+        </thead>
+
+        {% for row in rows_class %}
+        <tr>
+            <td>{{ row["Class"] }}</td>
+            <td>{{ row["count(*)"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3>Total Bird Count Chart</h3>
+    <div id="piechart_3d_class" style="width: 900px; height: 500px;"></div>
+
+{% endblock %}

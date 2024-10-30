@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block title %}
+List All Bird Records
+{% endblock %}
+{% block content %}
+        <table border="1px">
+            <thead>
+                <td><strong>Bird Row ID</strong></td>
+                <td><strong>English Name</strong></td>
+                <td><strong>Scientific Name</strong></td>
+                <td><strong>Class/ Family</strong></td>
+                <td><strong>Time of Recording</strong></td>
+                <td><strong>Longitude</strong></td>
+                <td><strong>Latitude</strong></td>
+            </thead>
+
+            {% for row in rows %}
+            <tr>
+                <td>{{ row["rowid"] }}</td>
+                <td>{{ row["EnglishName"] }}</td>
+                <td> {{ row["ScientificName"]}}</td>
+                <td>{{ row["Class"] }}</td>
+                <td>{{ row["Time"] }}</td>
+                <td>{{ row["longitude"] }}</td>
+                <td>{{ row["latitude"] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+{% endblock %}
